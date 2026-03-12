@@ -248,64 +248,65 @@ footer{
 </footer>
 
 <script>
-  // Get email from URL query string first, fallback to localStorage
-  const params = new URLSearchParams(window.location.search);
-  const email = params.get('email') || localStorage.getItem('userEmail');
+  // Safe email handling: localStorage first, fallback to URL query
+  let email = localStorage.getItem('userEmail') || new URLSearchParams(window.location.search).get('email');
 
-  if(!email){
-      alert('User email not found. Please log in first.');
-      window.location.href = 'login.html';
-  } else {
-      // Save email to localStorage so it persists
-      localStorage.setItem('userEmail', email);
+  if(email){
+      localStorage.setItem('userEmail', email); // persist for later
   }
 
-  // Load balance and total bets from localStorage
+  // Load balances from localStorage
   const balance = localStorage.getItem('userBalance') || 0;
   const totalBets = localStorage.getItem('userBets') || 0;
+
   document.getElementById('userBalance').innerText = balance;
   document.getElementById('headerBalance').innerText = balance;
   document.getElementById('userBets').innerText = totalBets;
   document.getElementById('headerBets').innerText = totalBets;
 
-  // Deposit button: redirect with email in query string
+  // Deposit button
   document.getElementById('depositBtn').addEventListener('click', () => {
+      if(!email){
+          alert('Please log in first.');
+          window.location.href = 'login.html';
+          return;
+      }
       window.location.href = 'deposit.html?email=' + encodeURIComponent(email);
   });
 
   // Betting function
   function placeBet(prediction, amount, choice){
-    const emailForBet = localStorage.getItem('userEmail');
-    if(!emailForBet){
-        alert('User email not found. Please log in first.');
-        return;
-    }
-
-    fetch('https://script.google.com/macros/s/AKfycbxV2dxRLbMsFtjQOlyAYZh7EkhpwwBPCmnczZ2J5wZMKBdareOIkdJfMO8gSrblyKO9WQ/exec', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ email: emailForBet, prediction: prediction, choice: choice, amount: amount })
-    })
-    .then(res=>res.json())
-    .then(data=>{
-      if(data.success){
-        localStorage.setItem('userBalance', data.balance);
-        localStorage.setItem('userBets', data.totalBets);
-
-        document.getElementById('userBalance').innerText = data.balance;
-        document.getElementById('headerBalance').innerText = data.balance;
-        document.getElementById('userBets').innerText = data.totalBets;
-        document.getElementById('headerBets').innerText = data.totalBets;
-
-        alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
-      } else {
-        alert('Error: ' + data.message);
+      const emailForBet = localStorage.getItem('userEmail');
+      if(!emailForBet){
+          alert('User email not found. Please log in first.');
+          return;
       }
-    })
-    .catch(err=>{
-      console.error(err);
-      alert('Server error. Try again later.');
-    });
+
+      fetch('https://script.google.com/macros/s/AKfycbxV2dxRLbMsFtjQOlyAYZh7EkhpwwBPCmnczZ2J5wZMKBdareOIkdJfMO8gSrblyKO9WQ/exec', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ email: emailForBet, prediction: prediction, choice: choice, amount: amount })
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.success){
+          localStorage.setItem('userBalance', data.balance);
+          localStorage.setItem('userBets', data.totalBets);
+
+          document.getElementById('userBalance').innerText = data.balance;
+          document.getElementById('headerBalance').innerText = data.balance;
+          document.getElementById('userBets').innerText = data.totalBets;
+          document.getElementById('headerBets').innerText = data.totalBets;
+
+          alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
+        } else {
+          alert('Error: ' + data.message);
+        }
+      })
+      .catch(err=>{
+        console.error(err);
+        alert('Server error. Try again later.');
+      });
   }
 </script>
 
