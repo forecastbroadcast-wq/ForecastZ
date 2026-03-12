@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PredictHub</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+}
+
+/* HEADER */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 8%;
+background:#020617;
+}
+
+.logo{
+font-size:22px;
+font-weight:bold;
+color:#38bdf8;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-size:14px;
+}
+
+.login-btn{
+background:#38bdf8;
+padding:8px 16px;
+border-radius:6px;
+color:black;
+font-weight:bold;
+}
+
+/* HERO */
+
+.hero{
+text-align:center;
+padding:80px 20px;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+}
+
+.hero h1{
+font-size:48px;
+margin-bottom:20px;
+}
+
+.hero p{
+font-size:18px;
+color:#94a3b8;
+margin-bottom:30px;
+}
+
+.hero button{
+padding:14px 30px;
+border:none;
+border-radius:8px;
+background:#38bdf8;
+color:black;
+font-size:16px;
+cursor:pointer;
+}
+
+/* MARKETS */
+
+.container{
+width:85%;
+margin:auto;
+margin-top:50px;
+}
+
+.section-title{
+font-size:26px;
+margin-bottom:30px;
+}
+
+/* CARD GRID */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:12px;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+.card h3{
+margin-bottom:10px;
+font-size:18px;
+}
+
+.pool{
+color:#94a3b8;
+margin-bottom:15px;
+}
+
+/* BUTTONS */
+
+.buttons{
+display:flex;
+gap:10px;
+}
+
+button{
+flex:1;
+padding:10px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.yes{
+background:#22c55e;
+color:white;
+}
+
+.no{
+background:#ef4444;
+color:white;
+}
+
+button:hover{
+opacity:0.85;
+}
+
+/* FOOTER */
+
+footer{
+margin-top:80px;
+padding:30px;
+text-align:center;
+background:#020617;
+color:#94a3b8;
+font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">PredictHub</div>
+
+<nav>
+<a href="#">Markets</a>
+<a href="#">Leaderboard</a>
+<a href="#">About</a>
+<a class="login-btn" href="login.html">Login</a>
+</nav>
+
+</header>
+
+
+<section class="hero">
+
+<h1>Predict The Future</h1>
+
+<p>Trade predictions on crypto, sports, politics and trending events.</p>
+
+<button onclick="goLogin()">Start Predicting</button>
+
+</section>
+
+
+<div class="container">
+
+<h2 class="section-title">🔥 Trending Predictions</h2>
+
+<div class="grid">
+
+<div class="card">
+
+<h3>Will Bitcoin reach $80k this month?</h3>
+
+<p class="pool">Pool: $4,200</p>
+
+<div class="buttons">
+
+<button class="yes" onclick="goLogin()">YES</button>
+
+<button class="no" onclick="goLogin()">NO</button>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>Will Arsenal win this weekend?</h3>
+
+<p class="pool">Pool: $1,800</p>
+
+<div class="buttons">
+
+<button class="yes" onclick="goLogin()">YES</button>
+
+<button class="no" onclick="goLogin()">NO</button>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>Will Kenya win the next AFCON match?</h3>
+
+<p class="pool">Pool: $900</p>
+
+<div class="buttons">
+
+<button class="yes" onclick="goLogin()">YES</button>
+
+<button class="no" onclick="goLogin()">NO</button>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>Will Ethereum hit $5000 this year?</h3>
+
+<p class="pool">Pool: $2,600</p>
+
+<div class="buttons">
+
+<button class="yes" onclick="goLogin()">YES</button>
+
+<button class="no" onclick="goLogin()">NO</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<footer>
+
+© 2026 PredictHub — Predict trends. Earn rewards.
+
+</footer>
+
+
+<script>
+
+function goLogin(){
+
+window.location.href="login.html";
+
+}
+
+</script>
+
+</body>
+</html>

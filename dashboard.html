@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PredictHub Dashboard</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+  background:#0f172a;
+  color:white;
+}
+
+/* HEADER */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 8%;
+  background:#020617;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:bold;
+  color:#38bdf8;
+}
+
+.balance{
+  display:flex;
+  align-items:center;
+}
+
+.balance b{
+  margin-right:10px;
+}
+
+.logout{
+  margin-left:15px;
+  color:#ef4444;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+/* MAIN CONTAINER */
+.container{
+  width:85%;
+  margin:auto;
+  margin-top:40px;
+}
+
+/* WALLET CARD */
+.wallet{
+  background:#1e293b;
+  padding:25px;
+  border-radius:12px;
+  margin-bottom:30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.wallet h2{
+  font-size:26px;
+}
+
+.deposit-btn{
+  background:#22c55e;
+  border:none;
+  padding:8px 20px;
+  border-radius:20px;
+  cursor:pointer;
+  color:white;
+  font-weight:bold;
+  font-size:14px;
+  transition:0.3s;
+  width:auto;
+  min-width:80px;
+}
+
+.deposit-btn:hover{
+  background:#16a34a;
+}
+
+/* BALANCE DISPLAY */
+.wallet .balances{
+  text-align:right;
+  color:#f0f9ff;
+}
+
+.wallet .balances p{
+  margin:3px 0;
+}
+
+/* SECTION TITLE */
+.section-title{
+  font-size:24px;
+  margin-bottom:20px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+}
+
+/* CARD */
+.card{
+  background:#1e293b;
+  padding:20px;
+  border-radius:12px;
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+.card h3{
+  margin-bottom:10px;
+  font-size:18px;
+}
+
+.pool{
+  color:#94a3b8;
+  margin-bottom:15px;
+}
+
+/* BUTTONS */
+.buttons{
+  display:flex;
+  gap:10px;
+}
+
+button{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.yes{
+  background:#22c55e;
+  color:white;
+}
+
+.no{
+  background:#ef4444;
+  color:white;
+}
+
+button:hover{
+  opacity:0.85;
+}
+
+/* FOOTER */
+footer{
+  margin-top:60px;
+  padding:20px;
+  text-align:center;
+  background:#020617;
+  color:#94a3b8;
+  font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">PredictHub</div>
+  <div class="balance">
+    <b>Balance: <span id="headerBalance">0</span> USDT</b>
+    <b>Total Staked: <span id="headerBets">0</span> USDT</b>
+    <a href="index.html" class="logout">Logout</a>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- WALLET -->
+  <div class="wallet">
+    <h2>Your Wallet</h2>
+    <div class="balances">
+      <p>Available Balance: <span id="userBalance">0</span> USDT</p>
+      <p>Total Staked: <span id="userBets">0</span> USDT</p>
+    </div>
+    <button class="deposit-btn" onclick="window.location.href='deposit.html'">Deposit</button>
+  </div>
+
+  <!-- PREDICTIONS -->
+  <h2 class="section-title">🔥 Available Predictions</h2>
+  <div class="grid">
+
+    <div class="card">
+      <h3>Will Bitcoin reach $80k?</h3>
+      <p class="pool">Pool: $4,200</p>
+      <div class="buttons">
+        <button class="yes" onclick="placeBet('Bitcoin $80k', 50, 'YES')">YES</button>
+        <button class="no" onclick="placeBet('Bitcoin $80k', 50, 'NO')">NO</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Will Arsenal win this weekend?</h3>
+      <p class="pool">Pool: $1,800</p>
+      <div class="buttons">
+        <button class="yes" onclick="placeBet('Arsenal Win', 20, 'YES')">YES</button>
+        <button class="no" onclick="placeBet('Arsenal Win', 20, 'NO')">NO</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Will Ethereum hit $5000 this year?</h3>
+      <p class="pool">Pool: $2,600</p>
+      <div class="buttons">
+        <button class="yes" onclick="placeBet('Ethereum $5000', 30, 'YES')">YES</button>
+        <button class="no" onclick="placeBet('Ethereum $5000', 30, 'NO')">NO</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Will Kenya win the next AFCON match?</h3>
+      <p class="pool">Pool: $900</p>
+      <div class="buttons">
+        <button class="yes" onclick="placeBet('Kenya AFCON', 10, 'YES')">YES</button>
+        <button class="no" onclick="placeBet('Kenya AFCON', 10, 'NO')">NO</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  © 2026 PredictHub — Prediction Markets Platform
+</footer>
+
+<script>
+  // Load balance and total bets from localStorage
+  const balance = localStorage.getItem('userBalance') || 0;
+  const totalBets = localStorage.getItem('userBets') || 0;
+  document.getElementById('userBalance').innerText = balance;
+  document.getElementById('headerBalance').innerText = balance;
+  document.getElementById('userBets').innerText = totalBets;
+  document.getElementById('headerBets').innerText = totalBets;
+
+  // Example betting function
+  function placeBet(prediction, amount, choice){
+  const email = localStorage.getItem('userEmail'); // logged-in user
+
+  fetch('https://script.google.com/macros/s/AKfycbxV2dxRLbMsFtjQOlyAYZh7EkhpwwBPCmnczZ2J5wZMKBdareOIkdJfMO8gSrblyKO9WQ/exec', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ email: email, prediction: prediction, choice: choice, amount: amount })
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.success){
+      localStorage.setItem('userBalance', data.balance);
+      localStorage.setItem('userBets', data.totalBets);
+
+      document.getElementById('userBalance').innerText = data.balance;
+      document.getElementById('headerBalance').innerText = data.balance;
+      document.getElementById('userBets').innerText = data.totalBets;
+      document.getElementById('headerBets').innerText = data.totalBets;
+
+      alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
+    } else {
+      alert('Error: ' + data.message);
+    }
+  })
+  .catch(err=>{
+    console.error(err);
+    alert('Server error. Try again later.');
+  });
+  }
+</script>
+
+</body>
+</html>

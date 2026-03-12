@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sign Up - PredictHub</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(135deg,#11998e,#38ef7d);
+}
+
+.signup-container{
+background:white;
+padding:40px;
+width:350px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+text-align:center;
+}
+
+.logo{
+font-size:22px;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+.signup-container h2{
+margin-bottom:20px;
+}
+
+.input-group{
+margin-bottom:15px;
+text-align:left;
+}
+
+input{
+width:100%;
+padding:12px;
+border-radius:6px;
+border:1px solid #ccc;
+font-size:14px;
+}
+
+input:focus{
+border-color:#11998e;
+outline:none;
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:6px;
+background:#11998e;
+color:white;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:#0d7f77;
+}
+
+#msg{
+margin-top:15px;
+color:green;
+font-size:14px;
+}
+
+.login-link{
+margin-top:15px;
+font-size:14px;
+}
+
+.login-link a{
+color:#11998e;
+text-decoration:none;
+font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="signup-container">
+
+<div class="logo">PredictHub</div>
+
+<h2>Create your account</h2>
+
+<form id="signupForm">
+
+<div class="input-group">
+<input type="text" id="name" placeholder="Full Name" required>
+</div>
+
+<div class="input-group">
+<input type="email" id="email" placeholder="Email" required>
+</div>
+
+<div class="input-group">
+<input type="password" id="password" placeholder="Password" required>
+</div>
+
+<button type="submit">Create Account</button>
+
+</form>
+
+<p id="msg"></p>
+
+<div class="login-link">
+Already have an account? <a href="login.html">Login</a>
+</div>
+
+</div>
+
+<script>
+
+const scriptURL = "https://script.google.com/macros/s/AKfycbwsfP0UxHX2A-5baysnfi_lr4r89ZXFFoXJDCYWNOB82i5XEg74Ig7dRL9Mi04D0Xyw/exec"
+
+document.getElementById("signupForm").addEventListener("submit", e => {
+
+e.preventDefault()
+
+fetch(scriptURL, {
+
+method:"POST",
+
+body:new URLSearchParams({
+
+action:"signup",
+
+name:document.getElementById("name").value,
+
+email:document.getElementById("email").value,
+
+password:document.getElementById("password").value
+
+})
+
+})
+
+.then(res=>res.text())
+
+.then(data=>{
+
+document.getElementById("msg").innerText="Account created successfully 🎉"
+
+})
+
+})
+
+</script>
+
+</body>
+</html>
