@@ -121,29 +121,30 @@
 
             localStorage.setItem('userEmail', email);
 
-            // ✅ Use CORS proxy to fix browser CORS error
-            const proxyURL = 'https://corsproxy.io/?https://script.google.com/macros/s/AKfycbxR3MZuufZowRWzxTchwqSiYkEapwshnh62t1fWWLISWxTswTUjU4voDyz-Dnniju8jQQ/exec';
-
-            fetch(proxyURL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: email, proof: proof, amount: amount })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    localStorage.setItem('userBalance', data.newBalance);
-                    alert('Deposit submitted! Your new balance: ' + data.newBalance + ' USDT');
-                    window.location.href = 'dashboard.html';
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                alert('Server error. Try again later.');
-            });
+            fetch('https://script.google.com/macros/s/AKfycbxR3MZuufZowRWzxTchwqSiYkEapwshnh62t1fWWLISWxTswTUjU4voDyz-Dnniju8jQQ/exec', {
+  method: 'POST',
+  body: new URLSearchParams({
+    email: email,
+    proof: proof,
+    amount: amount
+  })
+})
+.then(res => res.json())
+.then(data => {
+  if (data.success) {
+    localStorage.setItem('userBalance', data.newBalance);
+    alert('Deposit submitted! Balance: ' + data.newBalance);
+    window.location.href = 'dashboard.html';
+  } else {
+    alert(data.message);
+  }
+})
+.catch(err => {
+  console.error(err);
+  alert("Server error.");
+});
         }
     </script>
 </body>
 </html>
+
