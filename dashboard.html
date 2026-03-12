@@ -173,7 +173,6 @@ footer{
   color:#94a3b8;
   font-size:14px;
 }
-
 </style>
 </head>
 
@@ -197,7 +196,8 @@ footer{
       <p>Available Balance: <span id="userBalance">0</span> USDT</p>
       <p>Total Staked: <span id="userBets">0</span> USDT</p>
     </div>
-    <button class="deposit-btn" onclick="window.location.href='deposit.html'">Deposit</button>
+    <!-- Updated deposit button passes email via query string -->
+    <button class="deposit-btn" id="depositBtn">Deposit</button>
   </div>
 
   <!-- PREDICTIONS -->
@@ -257,35 +257,50 @@ footer{
   document.getElementById('userBets').innerText = totalBets;
   document.getElementById('headerBets').innerText = totalBets;
 
-  // Example betting function
-  function placeBet(prediction, amount, choice){
-  const email = localStorage.getItem('userEmail'); // logged-in user
-
-  fetch('https://script.google.com/macros/s/AKfycbxV2dxRLbMsFtjQOlyAYZh7EkhpwwBPCmnczZ2J5wZMKBdareOIkdJfMO8gSrblyKO9WQ/exec', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ email: email, prediction: prediction, choice: choice, amount: amount })
-  })
-  .then(res=>res.json())
-  .then(data=>{
-    if(data.success){
-      localStorage.setItem('userBalance', data.balance);
-      localStorage.setItem('userBets', data.totalBets);
-
-      document.getElementById('userBalance').innerText = data.balance;
-      document.getElementById('headerBalance').innerText = data.balance;
-      document.getElementById('userBets').innerText = data.totalBets;
-      document.getElementById('headerBets').innerText = data.totalBets;
-
-      alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
-    } else {
-      alert('Error: ' + data.message);
-    }
-  })
-  .catch(err=>{
-    console.error(err);
-    alert('Server error. Try again later.');
+  // Deposit button: redirect with email via query string
+  document.getElementById('depositBtn').addEventListener('click', () => {
+      const email = localStorage.getItem('userEmail');
+      if (!email) {
+          alert('User email not found. Please log in first.');
+          window.location.href = 'login.html';
+          return;
+      }
+      window.location.href = 'deposit.html?email=' + encodeURIComponent(email);
   });
+
+  // Betting function
+  function placeBet(prediction, amount, choice){
+    const email = localStorage.getItem('userEmail'); // still used for bets
+    if(!email){
+        alert('User email not found. Please log in first.');
+        return;
+    }
+
+    fetch('https://script.google.com/macros/s/AKfycbxV2dxRLbMsFtjQOlyAYZh7EkhpwwBPCmnczZ2J5wZMKBdareOIkdJfMO8gSrblyKO9WQ/exec', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email: email, prediction: prediction, choice: choice, amount: amount })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.success){
+        localStorage.setItem('userBalance', data.balance);
+        localStorage.setItem('userBets', data.totalBets);
+
+        document.getElementById('userBalance').innerText = data.balance;
+        document.getElementById('headerBalance').innerText = data.balance;
+        document.getElementById('userBets').innerText = data.totalBets;
+        document.getElementById('headerBets').innerText = data.totalBets;
+
+        alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
+      } else {
+        alert('Error: ' + data.message);
+      }
+    })
+    .catch(err=>{
+      console.error(err);
+      alert('Server error. Try again later.');
+    });
   }
 </script>
 
