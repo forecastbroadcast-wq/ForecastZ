@@ -248,13 +248,6 @@ footer{
 </footer>
 
 <script>
-  // Safe email handling: localStorage first, fallback to URL query
-  let email = localStorage.getItem('userEmail') || new URLSearchParams(window.location.search).get('email');
-
-  if(email){
-      localStorage.setItem('userEmail', email); // persist for later
-  }
-
   // Load balances from localStorage
   const balance = localStorage.getItem('userBalance') || 0;
   const totalBets = localStorage.getItem('userBets') || 0;
@@ -264,8 +257,9 @@ footer{
   document.getElementById('userBets').innerText = totalBets;
   document.getElementById('headerBets').innerText = totalBets;
 
-  // Deposit button
+  // Deposit button always reads localStorage at click time
   document.getElementById('depositBtn').addEventListener('click', () => {
+      const email = localStorage.getItem('userEmail');
       if(!email){
           alert('Please log in first.');
           window.location.href = 'login.html';
