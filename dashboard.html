@@ -196,7 +196,6 @@ footer{
       <p>Available Balance: <span id="userBalance">0</span> USDT</p>
       <p>Total Staked: <span id="userBets">0</span> USDT</p>
     </div>
-    <!-- Updated deposit button passes email via query string -->
     <button class="deposit-btn" id="depositBtn">Deposit</button>
   </div>
 
@@ -249,6 +248,18 @@ footer{
 </footer>
 
 <script>
+  // Get email from URL query string first, fallback to localStorage
+  const params = new URLSearchParams(window.location.search);
+  const email = params.get('email') || localStorage.getItem('userEmail');
+
+  if(!email){
+      alert('User email not found. Please log in first.');
+      window.location.href = 'login.html';
+  } else {
+      // Save email to localStorage so it persists
+      localStorage.setItem('userEmail', email);
+  }
+
   // Load balance and total bets from localStorage
   const balance = localStorage.getItem('userBalance') || 0;
   const totalBets = localStorage.getItem('userBets') || 0;
@@ -257,21 +268,15 @@ footer{
   document.getElementById('userBets').innerText = totalBets;
   document.getElementById('headerBets').innerText = totalBets;
 
-  // Deposit button: redirect with email via query string
+  // Deposit button: redirect with email in query string
   document.getElementById('depositBtn').addEventListener('click', () => {
-      const email = localStorage.getItem('userEmail');
-      if (!email) {
-          alert('User email not found. Please log in first.');
-          window.location.href = 'login.html';
-          return;
-      }
       window.location.href = 'deposit.html?email=' + encodeURIComponent(email);
   });
 
   // Betting function
   function placeBet(prediction, amount, choice){
-    const email = localStorage.getItem('userEmail'); // still used for bets
-    if(!email){
+    const emailForBet = localStorage.getItem('userEmail');
+    if(!emailForBet){
         alert('User email not found. Please log in first.');
         return;
     }
@@ -279,7 +284,7 @@ footer{
     fetch('https://script.google.com/macros/s/AKfycbxV2dxRLbMsFtjQOlyAYZh7EkhpwwBPCmnczZ2J5wZMKBdareOIkdJfMO8gSrblyKO9WQ/exec', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ email: email, prediction: prediction, choice: choice, amount: amount })
+      body: JSON.stringify({ email: emailForBet, prediction: prediction, choice: choice, amount: amount })
     })
     .then(res=>res.json())
     .then(data=>{
