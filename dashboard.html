@@ -116,23 +116,29 @@ function updateBalances(balance, totalBets){
 // ---------------------
 async function fetchUserInfo(){
   try {
+    const email = localStorage.getItem('userEmail')?.trim().toLowerCase();
+    if (!email) throw new Error("No email in localStorage");
+
     const res = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type':'application/json' },
       body: JSON.stringify({ action:'login', email })
     });
+    
     const data = await res.json();
+    console.log("API response:", data);  // ← add this for debugging
 
     if(data.success){
       updateBalances(data.balance || 0, data.totalBets || 0);
     } else {
-      alert(data.message);
+      console.error("API failed:", data.message);
+      alert(data.message || "Session expired - please login again");
       localStorage.removeItem('userEmail');
       window.location.href = "login.html";
     }
   } catch(err){
-    console.error(err);
-    alert('Server error. Please try again.');
+    console.error("Fetch error:", err);
+    alert('Could not load balance. Check internet or login again.');
   }
 }
 
@@ -185,6 +191,7 @@ async function placeBet(prediction, amount, choice) {
 
 </body>
 </html>
+
 
 
 
