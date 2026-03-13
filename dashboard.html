@@ -276,34 +276,41 @@ footer{
           return;
       }
 
-      fetch('https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJIqNhXw0IXArQCkSNE8qsjiLHJkPVJJRqftQUUUTLTt61qA/exec', {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ email: emailForBet, prediction: prediction, choice: choice, amount: amount })
-      })
-      .then(res=>res.json())
-      .then(data=>{
-        if(data.success){
-          localStorage.setItem('userBalance', data.balance);
-          localStorage.setItem('userBets', data.totalBets);
+fetch('https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJIqNhXw0IXArQCkSNE8qsjiLHJkPVJJRqftQUUUTLTt61qA/exec', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    action: 'placeBet',
+    email: emailForBet,
+    prediction: prediction,
+    choice: choice,
+    amount: amount
+  })
+})
+.then(res => res.json())
+.then(data => {
+  if(data.success){
+    localStorage.setItem('userBalance', data.balance);
+    localStorage.setItem('userBets', data.totalBets);
 
-          document.getElementById('userBalance').innerText = data.balance;
-          document.getElementById('headerBalance').innerText = data.balance;
-          document.getElementById('userBets').innerText = data.totalBets;
-          document.getElementById('headerBets').innerText = data.totalBets;
+    document.getElementById('userBalance').innerText = data.balance;
+    document.getElementById('headerBalance').innerText = data.balance;
+    document.getElementById('userBets').innerText = data.totalBets;
+    document.getElementById('headerBets').innerText = data.totalBets;
 
-          alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
-        } else {
-          alert('Error: ' + data.message);
-        }
-      })
-      .catch(err=>{
-        console.error(err);
-        alert('Server error. Try again later.');
-      });
+    alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
+  } else {
+    alert('Error: ' + data.message);
+  }
+})
+.catch(err => {
+  console.error(err);
+  alert('Server error. Try again later.');
+});
   }
 </script>
 
 </body>
 </html>
+
 
