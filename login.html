@@ -3,73 +3,62 @@
 <head>
 <title>Login - PredictHub</title>
 <style>
-body{ margin:0; font-family:Arial, Helvetica, sans-serif; height:100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#1e3c72,#2a5298);}
-.login-container{ background:white; padding:40px; width:350px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.2); text-align:center;}
-.logo{ font-size:22px; font-weight:bold; margin-bottom:10px; }
-.login-container h2{ margin-bottom:20px; }
-.input-group{ margin-bottom:15px; text-align:left; }
-input{ width:100%; padding:12px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
-input:focus{ border-color:#2a5298; outline:none; }
-button{ width:100%; padding:12px; border:none; border-radius:6px; background:#2a5298; color:white; font-size:16px; cursor:pointer; transition:0.3s;}
-button:hover{ background:#1e3c72; }
-#msg{ margin-top:15px; color:red; font-size:14px; }
-.signup-link{ margin-top:15px; font-size:14px; }
-.signup-link a{ color:#2a5298; text-decoration:none; font-weight:bold; }
+body { margin:0; font-family:Arial, Helvetica, sans-serif; height:100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#1e3c72,#2a5298); }
+.login-container { background:white; padding:40px; width:350px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.2); text-align:center; }
+.logo { font-size:22px; font-weight:bold; margin-bottom:10px; }
+.input-group { margin-bottom:15px; text-align:left; }
+input { width:100%; padding:12px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
+input:focus { border-color:#2a5298; outline:none; }
+button { width:100%; padding:12px; border:none; border-radius:6px; background:#2a5298; color:white; font-size:16px; cursor:pointer; transition:0.3s; }
+button:hover { background:#1e3c72; }
+#msg { margin-top:15px; color:red; font-size:14px; }
+.signup-link { margin-top:15px; font-size:14px; }
+.signup-link a { color:#2a5298; text-decoration:none; font-weight:bold; }
 </style>
 </head>
 <body>
+
 <div class="login-container">
-<div class="logo">PredictHub</div>
-<h2>Login to your account</h2>
+  <div class="logo">PredictHub</div>
+  <h2>Login to your account</h2>
 
-<form id="loginForm">
-  <div class="input-group">
-    <input type="email" id="email" placeholder="Email" required>
-  </div>
-  <div class="input-group">
-    <input type="password" id="password" placeholder="Password" required>
-  </div>
-  <button type="submit">Login</button>
-</form>
+  <form id="loginForm">
+    <div class="input-group"><input type="email" id="email" placeholder="Email" required></div>
+    <div class="input-group"><input type="password" id="password" placeholder="Password" required></div>
+    <button type="submit">Login</button>
+  </form>
 
-<p id="msg"></p>
-<div class="signup-link">
-Don't have an account? <a href="signup.html">Sign Up</a>
-</div>
+  <p id="msg"></p>
+
+  <div class="signup-link">
+    Don't have an account? <a href="signup.html">Sign Up</a>
+  </div>
 </div>
 
 <script>
-const scriptURL = "YOUR_API_WEBAPP_URL";
+const API_URL = "https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJIqNhXw0IXArQCkSNE8qsjiLHJkPVJJRqftQUUUTLTt61qA/exec";
 
 document.getElementById("loginForm").addEventListener("submit", e => {
     e.preventDefault();
-
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
 
-    fetch(scriptURL, {
+    fetch(API_URL, {
         method: "POST",
-        body: new URLSearchParams({
-            action: "login",
-            email: email,
-            password: password
-        })
+        body: new URLSearchParams({ action: "login", email, password })
     })
     .then(res => res.json())
     .then(data => {
         if(data.success){
-            localStorage.setItem('userEmail', email);
-            localStorage.setItem('userBalance', data.balance || 0);
-            localStorage.setItem('userBets', 0);
+            localStorage.setItem("userEmail", email);
+            localStorage.setItem("userBalance", data.balance);
+            localStorage.setItem("userBets", data.totalBets);
             window.location.href = "dashboard.html";
         } else {
-            document.getElementById("msg").innerText = "Invalid email or password. Please sign up.";
+            document.getElementById("msg").innerText = data.message;
         }
     })
-    .catch(err => {
-        console.error(err);
-        document.getElementById("msg").innerText = "Server error. Try again later.";
-    });
+    .catch(err => { console.error(err); document.getElementById("msg").innerText="Server error." });
 });
 </script>
 </body>
