@@ -64,9 +64,7 @@
         if (!email) { alert('User email not found. Please log in first.'); window.location.href='login.html'; return; }
 
         localStorage.setItem('userEmail', email);
-
-        // Send JSON body (works with your deposit.gs)
-       fetch('https://script.google.com/macros/s/AKfycbwvRUNXBm_f3CrhRki0fYQKROYWidqVKPtXxfGpf2rFZM6dbHUdDGkSq0jLHxZxuxS5WA/exec', {
+       fetch('https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJIqNhXw0IXArQCkSNE8qsjiLHJkPVJJRqftQUUUTLTt61qA/exec', {
     method: 'POST',
     body: new URLSearchParams({
         email: email,
@@ -92,5 +90,6 @@
 </script>
 </body>
 </html>
+
 
 
