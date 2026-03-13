@@ -22,9 +22,25 @@ body {
 }
 .logo { font-size:22px; font-weight:bold; margin-bottom:10px; }
 .input-group { margin-bottom:15px; text-align:left; }
-input { width:100%; padding:12px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
+input {
+    width:100%;
+    padding:12px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    font-size:14px;
+}
 input:focus { border-color:#11998e; outline:none; }
-button { width:100%; padding:12px; border:none; border-radius:6px; background:#11998e; color:white; font-size:16px; cursor:pointer; transition:0.3s; }
+button {
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:6px;
+    background:#11998e;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
 button:hover { background:#0d7f77; }
 #msg { margin-top:15px; color:green; font-size:14px; }
 .login-link { margin-top:15px; font-size:14px; }
@@ -57,10 +73,15 @@ const API_URL = "https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJ
 document.getElementById("signupForm").addEventListener("submit", e => {
     e.preventDefault();
     const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
+    const email = document.getElementById("email").value.trim().toLowerCase();
     const password = document.getElementById("password").value.trim();
 
-    if(!name || !email || !password) return;
+    if(!name || !email || !password){
+        document.getElementById("msg").innerText = "Please fill all fields";
+        return;
+    }
+
+    document.getElementById("msg").innerText = "";
 
     fetch(API_URL, {
         method: "POST",
@@ -69,13 +90,20 @@ document.getElementById("signupForm").addEventListener("submit", e => {
     .then(res => res.json())
     .then(data => {
         if(data.success){
-            document.getElementById("msg").innerText = "Account created successfully 🎉. Click Login.";
+            document.getElementById("msg").style.color = "green";
+            document.getElementById("msg").innerText = "Account created! You can now login.";
+            // Optionally reset form
             document.getElementById("signupForm").reset();
         } else {
-            document.getElementById("msg").innerText = "Error: " + data.message;
+            document.getElementById("msg").style.color = "red";
+            document.getElementById("msg").innerText = data.message || "Signup failed";
         }
     })
-    .catch(err => { console.error(err); document.getElementById("msg").innerText="Server error." });
+    .catch(err => {
+        console.error(err);
+        document.getElementById("msg").style.color = "red";
+        document.getElementById("msg").innerText = "Server error. Try again later.";
+    });
 });
 </script>
 </body>
