@@ -39,7 +39,7 @@ footer{ margin-top:60px; padding:20px; text-align:center; background:#020617; co
   <div class="balance">
     <b>Balance: <span id="headerBalance">0</span> USDT</b>
     <b>Total Staked: <span id="headerBets">0</span> USDT</b>
-    <a href="login.html" class="logout">Logout</a>
+    <a href="login.html" class="logout" id="logoutBtn">Logout</a>
   </div>
 </header>
 
@@ -97,36 +97,54 @@ footer{ margin-top:60px; padding:20px; text-align:center; background:#020617; co
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJIqNhXw0IXArQCkSNE8qsjiLHJkPVJJRqftQUUUTLTt61qA/exec";
 
-// Normalize email
+// Get stored email or redirect to login
 const email = (localStorage.getItem('userEmail') || "").trim().toLowerCase();
 if(!email) { window.location.href = "login.html"; }
 
-// Fetch user info from API to prevent stale login
-fetch(API_URL, {
-  method:'POST',
-  body: new URLSearchParams({ action:'login', email })
-})
-.then(res => res.json())
-.then(data => {
-  if(data.success){
-    localStorage.setItem('userBalance', data.balance || 0);
-    localStorage.setItem('userBets', data.totalBets || 0);
+// Function to update UI balances
+function updateBalances(balance, totalBets){
+  document.getElementById('userBalance').innerText = balance;
+  document.getElementById('headerBalance').innerText = balance;
+  document.getElementById('userBets').innerText = totalBets;
+  document.getElementById('headerBets').innerText = totalBets;
+  localStorage.setItem('userBalance', balance);
+  localStorage.setItem('userBets', totalBets);
+}
 
-    document.getElementById('userBalance').innerText = data.balance || 0;
-    document.getElementById('headerBalance').innerText = data.balance || 0;
-    document.getElementById('userBets').innerText = data.totalBets || 0;
-    document.getElementById('headerBets').innerText = data.totalBets || 0;
-  } else {
-    alert(data.message);
-    localStorage.removeItem('userEmail');
-    window.location.href = "login.html";
-  }
-})
-.catch(err => { console.error(err); alert('Server error'); });
+// Fetch user info safely
+function fetchUserInfo(){
+  fetch(API_URL, {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json' },
+    body: JSON.stringify({ action:'login', email })
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.success){
+      updateBalances(data.balance || 0, data.totalBets || 0);
+    } else {
+      alert(data.message);
+      localStorage.removeItem('userEmail');
+      window.location.href = "login.html";
+    }
+  })
+  .catch(err=>{ console.error(err); alert('Server error'); });
+}
 
-// Deposit button click
-document.getElementById('depositBtn').addEventListener('click', () => {
-    window.location.href = 'deposit.html?email=' + encodeURIComponent(email);
+// Initial load
+fetchUserInfo();
+
+// Deposit button
+document.getElementById('depositBtn').addEventListener('click', ()=>{
+  window.location.href = 'deposit.html?email=' + encodeURIComponent(email);
+});
+
+// Logout button
+document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  localStorage.removeItem('userEmail');
+  localStorage.removeItem('userBalance');
+  localStorage.removeItem('userBets');
+  window.location.href = 'login.html';
 });
 
 // Place bet function
@@ -139,14 +157,7 @@ function placeBet(prediction, amount, choice){
   .then(res=>res.json())
   .then(data=>{
     if(data.success){
-      localStorage.setItem('userBalance', data.balance);
-      localStorage.setItem('userBets', data.totalBets);
-
-      document.getElementById('userBalance').innerText = data.balance;
-      document.getElementById('headerBalance').innerText = data.balance;
-      document.getElementById('userBets').innerText = data.totalBets;
-      document.getElementById('headerBets').innerText = data.totalBets;
-
+      updateBalances(data.balance, data.totalBets);
       alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
     } else {
       alert('Error: '+data.message);
