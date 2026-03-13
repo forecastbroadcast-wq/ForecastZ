@@ -97,11 +97,11 @@ footer{ margin-top:60px; padding:20px; text-align:center; background:#020617; co
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJIqNhXw0IXArQCkSNE8qsjiLHJkPVJJRqftQUUUTLTt61qA/exec";
 
-// Check login
-const email = localStorage.getItem('userEmail');
-if(!email){ window.location.href = "login.html"; }
+// Normalize email
+const email = (localStorage.getItem('userEmail') || "").trim().toLowerCase();
+if(!email) { window.location.href = "login.html"; }
 
-// Fetch user balance & bets from API
+// Fetch user info from API to prevent stale login
 fetch(API_URL, {
   method:'POST',
   body: new URLSearchParams({ action:'login', email })
@@ -118,17 +118,18 @@ fetch(API_URL, {
     document.getElementById('headerBets').innerText = data.totalBets || 0;
   } else {
     alert(data.message);
+    localStorage.removeItem('userEmail');
     window.location.href = "login.html";
   }
 })
 .catch(err => { console.error(err); alert('Server error'); });
 
-// Deposit button
+// Deposit button click
 document.getElementById('depositBtn').addEventListener('click', () => {
     window.location.href = 'deposit.html?email=' + encodeURIComponent(email);
 });
 
-// Betting function
+// Place bet function
 function placeBet(prediction, amount, choice){
   fetch(API_URL, {
     method:'POST',
@@ -147,7 +148,9 @@ function placeBet(prediction, amount, choice){
       document.getElementById('headerBets').innerText = data.totalBets;
 
       alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
-    } else alert('Error: '+data.message);
+    } else {
+      alert('Error: '+data.message);
+    }
   })
   .catch(err=>{ console.error(err); alert('Server error'); });
 }
