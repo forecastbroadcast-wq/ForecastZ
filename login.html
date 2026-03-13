@@ -125,37 +125,41 @@ document.getElementById("loginForm").addEventListener("submit", e => {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
 
+    // send JSON body to match api.gs
     fetch(scriptURL, {
-        method:"POST",
-        body:new URLSearchParams({
-            action:"login",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            action: "login",
             email: email,
             password: password
         })
     })
-    .then(res=>res.text())
-    .then(data=>{
-        if(data=="login_success"){
-            // ✅ store email for other pages
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            // store user info
             localStorage.setItem('userEmail', email);
+            localStorage.setItem('userName', data.name);
+            localStorage.setItem('userBalance', data.balance || 0);
 
-            // optional: reset balances if first login
-            if(!localStorage.getItem('userBalance')) localStorage.setItem('userBalance', 0);
-            if(!localStorage.getItem('userBets')) localStorage.setItem('userBets', 0);
+            // optional: reset userBets if first login
+            if (!localStorage.getItem('userBets')) localStorage.setItem('userBets', 0);
 
             // redirect to dashboard
-            window.location.href="dashboard.html";
+            window.location.href = "dashboard.html";
         } else {
-            document.getElementById("msg").innerText="Invalid email or password. Please sign up.";
+            document.getElementById("msg").innerText = data.message || "Invalid email or password. Please sign up.";
         }
     })
-    .catch(err=>{
+    .catch(err => {
         console.error(err);
-        document.getElementById("msg").innerText="Server error. Try again later.";
+        document.getElementById("msg").innerText = "Server error. Try again later.";
     });
 });
 </script>
 
 </body>
 </html>
+
 
