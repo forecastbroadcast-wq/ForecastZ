@@ -134,6 +134,9 @@ function fetchUserInfo(){
 // Initial load
 fetchUserInfo();
 
+// Auto-refresh balances every 60 seconds
+setInterval(fetchUserInfo, 60000); // 60000 ms = 1 minute
+
 // Deposit button
 document.getElementById('depositBtn').addEventListener('click', ()=>{
   window.location.href = 'deposit.html?email=' + encodeURIComponent(email);
@@ -169,3 +172,4 @@ function placeBet(prediction, amount, choice){
 
 </body>
 </html>
+
