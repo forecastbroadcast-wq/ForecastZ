@@ -2,180 +2,36 @@
 <html>
 <head>
 <title>PredictHub Dashboard</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial, Helvetica, sans-serif;
-}
-
-body{
-  background:#0f172a;
-  color:white;
-}
-
-/* HEADER */
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:20px 8%;
-  background:#020617;
-}
-
-.logo{
-  font-size:22px;
-  font-weight:bold;
-  color:#38bdf8;
-}
-
-.balance{
-  display:flex;
-  align-items:center;
-}
-
-.balance b{
-  margin-right:10px;
-}
-
-.logout{
-  margin-left:15px;
-  color:#ef4444;
-  text-decoration:none;
-  font-weight:bold;
-}
-
-/* MAIN CONTAINER */
-.container{
-  width:85%;
-  margin:auto;
-  margin-top:40px;
-}
-
-/* WALLET CARD */
-.wallet{
-  background:#1e293b;
-  padding:25px;
-  border-radius:12px;
-  margin-bottom:30px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.wallet h2{
-  font-size:26px;
-}
-
-.deposit-btn{
-  background:#22c55e;
-  border:none;
-  padding:8px 20px;
-  border-radius:20px;
-  cursor:pointer;
-  color:white;
-  font-weight:bold;
-  font-size:14px;
-  transition:0.3s;
-  width:auto;
-  min-width:80px;
-}
-
-.deposit-btn:hover{
-  background:#16a34a;
-}
-
-/* BALANCE DISPLAY */
-.wallet .balances{
-  text-align:right;
-  color:#f0f9ff;
-}
-
-.wallet .balances p{
-  margin:3px 0;
-}
-
-/* SECTION TITLE */
-.section-title{
-  font-size:24px;
-  margin-bottom:20px;
-}
-
-/* GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:20px;
-}
-
-/* CARD */
-.card{
-  background:#1e293b;
-  padding:20px;
-  border-radius:12px;
-  transition:0.3s;
-}
-
-.card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 10px 25px rgba(0,0,0,0.4);
-}
-
-.card h3{
-  margin-bottom:10px;
-  font-size:18px;
-}
-
-.pool{
-  color:#94a3b8;
-  margin-bottom:15px;
-}
-
-/* BUTTONS */
-.buttons{
-  display:flex;
-  gap:10px;
-}
-
-button{
-  flex:1;
-  padding:10px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-.yes{
-  background:#22c55e;
-  color:white;
-}
-
-.no{
-  background:#ef4444;
-  color:white;
-}
-
-button:hover{
-  opacity:0.85;
-}
-
-/* FOOTER */
-footer{
-  margin-top:60px;
-  padding:20px;
-  text-align:center;
-  background:#020617;
-  color:#94a3b8;
-  font-size:14px;
-}
+*{ margin:0; padding:0; box-sizing:border-box; font-family:Arial, Helvetica, sans-serif; }
+body{ background:#0f172a; color:white; }
+header{ display:flex; justify-content:space-between; align-items:center; padding:20px 8%; background:#020617; }
+.logo{ font-size:22px; font-weight:bold; color:#38bdf8; }
+.balance{ display:flex; align-items:center; }
+.balance b{ margin-right:10px; }
+.logout{ margin-left:15px; color:#ef4444; text-decoration:none; font-weight:bold; }
+.container{ width:85%; margin:auto; margin-top:40px; }
+.wallet{ background:#1e293b; padding:25px; border-radius:12px; margin-bottom:30px; display:flex; justify-content:space-between; align-items:center; }
+.wallet h2{ font-size:26px; }
+.deposit-btn{ background:#22c55e; border:none; padding:8px 20px; border-radius:20px; cursor:pointer; color:white; font-weight:bold; font-size:14px; transition:0.3s; width:auto; min-width:80px; }
+.deposit-btn:hover{ background:#16a34a; }
+.wallet .balances{ text-align:right; color:#f0f9ff; }
+.wallet .balances p{ margin:3px 0; }
+.section-title{ font-size:24px; margin-bottom:20px; }
+.grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
+.card{ background:#1e293b; padding:20px; border-radius:12px; transition:0.3s; }
+.card:hover{ transform:translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.4); }
+.card h3{ margin-bottom:10px; font-size:18px; }
+.pool{ color:#94a3b8; margin-bottom:15px; }
+.buttons{ display:flex; gap:10px; }
+button{ flex:1; padding:10px; border:none; border-radius:6px; cursor:pointer; font-weight:bold; }
+.yes{ background:#22c55e; color:white; }
+.no{ background:#ef4444; color:white; }
+button:hover{ opacity:0.85; }
+footer{ margin-top:60px; padding:20px; text-align:center; background:#020617; color:#94a3b8; font-size:14px; }
 </style>
 </head>
-
 <body>
 
 <header>
@@ -183,13 +39,11 @@ footer{
   <div class="balance">
     <b>Balance: <span id="headerBalance">0</span> USDT</b>
     <b>Total Staked: <span id="headerBets">0</span> USDT</b>
-    <a href="index.html" class="logout">Logout</a>
+    <a href="login.html" class="logout">Logout</a>
   </div>
 </header>
 
 <div class="container">
-
-  <!-- WALLET -->
   <div class="wallet">
     <h2>Your Wallet</h2>
     <div class="balances">
@@ -199,10 +53,8 @@ footer{
     <button class="deposit-btn" id="depositBtn">Deposit</button>
   </div>
 
-  <!-- PREDICTIONS -->
   <h2 class="section-title">🔥 Available Predictions</h2>
   <div class="grid">
-
     <div class="card">
       <h3>Will Bitcoin reach $80k?</h3>
       <p class="pool">Pool: $4,200</p>
@@ -211,7 +63,6 @@ footer{
         <button class="no" onclick="placeBet('Bitcoin $80k', 50, 'NO')">NO</button>
       </div>
     </div>
-
     <div class="card">
       <h3>Will Arsenal win this weekend?</h3>
       <p class="pool">Pool: $1,800</p>
@@ -220,7 +71,6 @@ footer{
         <button class="no" onclick="placeBet('Arsenal Win', 20, 'NO')">NO</button>
       </div>
     </div>
-
     <div class="card">
       <h3>Will Ethereum hit $5000 this year?</h3>
       <p class="pool">Pool: $2,600</p>
@@ -229,7 +79,6 @@ footer{
         <button class="no" onclick="placeBet('Ethereum $5000', 30, 'NO')">NO</button>
       </div>
     </div>
-
     <div class="card">
       <h3>Will Kenya win the next AFCON match?</h3>
       <p class="pool">Pool: $900</p>
@@ -238,9 +87,7 @@ footer{
         <button class="no" onclick="placeBet('Kenya AFCON', 10, 'NO')">NO</button>
       </div>
     </div>
-
   </div>
-
 </div>
 
 <footer>
@@ -248,69 +95,63 @@ footer{
 </footer>
 
 <script>
-  // Load balances from localStorage
-  const balance = localStorage.getItem('userBalance') || 0;
-  const totalBets = localStorage.getItem('userBets') || 0;
+const API_URL = "https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJIqNhXw0IXArQCkSNE8qsjiLHJkPVJJRqftQUUUTLTt61qA/exec";
 
-  document.getElementById('userBalance').innerText = balance;
-  document.getElementById('headerBalance').innerText = balance;
-  document.getElementById('userBets').innerText = totalBets;
-  document.getElementById('headerBets').innerText = totalBets;
+// Check login
+const email = localStorage.getItem('userEmail');
+if(!email){ window.location.href = "login.html"; }
 
-  // Deposit button always reads localStorage at click time
-  document.getElementById('depositBtn').addEventListener('click', () => {
-      const email = localStorage.getItem('userEmail');
-      if(!email){
-          alert('Please log in first.');
-          window.location.href = 'login.html';
-          return;
-      }
-      window.location.href = 'deposit.html?email=' + encodeURIComponent(email);
-  });
-
-  // Betting function
-  function placeBet(prediction, amount, choice){
-      const emailForBet = localStorage.getItem('userEmail');
-      if(!emailForBet){
-          alert('User email not found. Please log in first.');
-          return;
-      }
-
-fetch('https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJIqNhXw0IXArQCkSNE8qsjiLHJkPVJJRqftQUUUTLTt61qA/exec', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    action: 'placeBet',
-    email: emailForBet,
-    prediction: prediction,
-    choice: choice,
-    amount: amount
-  })
+// Fetch user balance & bets from API
+fetch(API_URL, {
+  method:'POST',
+  body: new URLSearchParams({ action:'login', email })
 })
 .then(res => res.json())
 .then(data => {
   if(data.success){
-    localStorage.setItem('userBalance', data.balance);
-    localStorage.setItem('userBets', data.totalBets);
+    localStorage.setItem('userBalance', data.balance || 0);
+    localStorage.setItem('userBets', data.totalBets || 0);
 
-    document.getElementById('userBalance').innerText = data.balance;
-    document.getElementById('headerBalance').innerText = data.balance;
-    document.getElementById('userBets').innerText = data.totalBets;
-    document.getElementById('headerBets').innerText = data.totalBets;
-
-    alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
+    document.getElementById('userBalance').innerText = data.balance || 0;
+    document.getElementById('headerBalance').innerText = data.balance || 0;
+    document.getElementById('userBets').innerText = data.totalBets || 0;
+    document.getElementById('headerBets').innerText = data.totalBets || 0;
   } else {
-    alert('Error: ' + data.message);
+    alert(data.message);
+    window.location.href = "login.html";
   }
 })
-.catch(err => {
-  console.error(err);
-  alert('Server error. Try again later.');
+.catch(err => { console.error(err); alert('Server error'); });
+
+// Deposit button
+document.getElementById('depositBtn').addEventListener('click', () => {
+    window.location.href = 'deposit.html?email=' + encodeURIComponent(email);
 });
-  }
+
+// Betting function
+function placeBet(prediction, amount, choice){
+  fetch(API_URL, {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json' },
+    body: JSON.stringify({ action:'placeBet', email, prediction, choice, amount })
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.success){
+      localStorage.setItem('userBalance', data.balance);
+      localStorage.setItem('userBets', data.totalBets);
+
+      document.getElementById('userBalance').innerText = data.balance;
+      document.getElementById('headerBalance').innerText = data.balance;
+      document.getElementById('userBets').innerText = data.totalBets;
+      document.getElementById('headerBets').innerText = data.totalBets;
+
+      alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
+    } else alert('Error: '+data.message);
+  })
+  .catch(err=>{ console.error(err); alert('Server error'); });
+}
 </script>
 
 </body>
 </html>
-
-
