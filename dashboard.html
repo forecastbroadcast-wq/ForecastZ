@@ -101,25 +101,24 @@ const API_URL = "https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJ
 const email = (localStorage.getItem('userEmail') || "").trim().toLowerCase();
 if(!email) { window.location.href = "login.html"; }
 
-// Function to update UI balances
+// Update UI balances
 function updateBalances(balance, totalBets){
   document.getElementById('userBalance').innerText = balance;
   document.getElementById('headerBalance').innerText = balance;
   document.getElementById('userBets').innerText = totalBets;
   document.getElementById('headerBets').innerText = totalBets;
-  localStorage.setItem('userBalance', balance);
-  localStorage.setItem('userBets', totalBets);
 }
 
-// Fetch user info safely
-function fetchUserInfo(){
-  fetch(API_URL, {
-    method:'POST',
-    headers:{ 'Content-Type':'application/json' },
-    body: JSON.stringify({ action:'login', email })
-  })
-  .then(res=>res.json())
-  .then(data=>{
+// Fetch user info from API
+async function fetchUserInfo(){
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json' },
+      body: JSON.stringify({ action: 'login', email })
+    });
+    const data = await res.json();
+
     if(data.success){
       updateBalances(data.balance || 0, data.totalBets || 0);
     } else {
@@ -127,49 +126,53 @@ function fetchUserInfo(){
       localStorage.removeItem('userEmail');
       window.location.href = "login.html";
     }
-  })
-  .catch(err=>{ console.error(err); alert('Server error'); });
+  } catch(err){
+    console.error(err);
+    alert('Server error. Please try again.');
+  }
 }
 
 // Initial load
 fetchUserInfo();
 
 // Auto-refresh balances every 60 seconds
-setInterval(fetchUserInfo, 60000); // 60000 ms = 1 minute
+setInterval(fetchUserInfo, 60000);
 
 // Deposit button
-document.getElementById('depositBtn').addEventListener('click', ()=>{
+document.getElementById('depositBtn').addEventListener('click', () => {
   window.location.href = 'deposit.html?email=' + encodeURIComponent(email);
 });
 
 // Logout button
-document.getElementById('logoutBtn').addEventListener('click', ()=>{
+document.getElementById('logoutBtn').addEventListener('click', () => {
   localStorage.removeItem('userEmail');
-  localStorage.removeItem('userBalance');
-  localStorage.removeItem('userBets');
   window.location.href = 'login.html';
 });
 
 // Place bet function
-function placeBet(prediction, amount, choice){
-  fetch(API_URL, {
-    method:'POST',
-    headers:{ 'Content-Type':'application/json' },
-    body: JSON.stringify({ action:'placeBet', email, prediction, choice, amount })
-  })
-  .then(res=>res.json())
-  .then(data=>{
+async function placeBet(prediction, amount, choice){
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json' },
+      body: JSON.stringify({ action:'placeBet', email, prediction, choice, amount })
+    });
+    const data = await res.json();
+
     if(data.success){
-      updateBalances(data.balance, data.totalBets);
+      updateBalances(data.balance || 0, data.totalBets || 0);
       alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
     } else {
       alert('Error: '+data.message);
     }
-  })
-  .catch(err=>{ console.error(err); alert('Server error'); });
+  } catch(err){
+    console.error(err);
+    alert('Server error. Please try again.');
+  }
 }
 </script>
 
 </body>
 </html>
+
 
