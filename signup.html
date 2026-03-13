@@ -3,106 +3,79 @@
 <head>
 <title>Sign Up - PredictHub</title>
 <style>
-body{
-  margin:0;
-  font-family:Arial, Helvetica, sans-serif;
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,#11998e,#38ef7d);
+body {
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#11998e,#38ef7d);
 }
-.signup-container{
-  background:white;
-  padding:40px;
-  width:350px;
-  border-radius:12px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.2);
-  text-align:center;
+.signup-container {
+    background:white;
+    padding:40px;
+    width:350px;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+    text-align:center;
 }
-.logo{ font-size:22px; font-weight:bold; margin-bottom:10px; }
-.signup-container h2{ margin-bottom:20px; }
-.input-group{ margin-bottom:15px; text-align:left; }
-input{
-  width:100%;
-  padding:12px;
-  border-radius:6px;
-  border:1px solid #ccc;
-  font-size:14px;
-}
-input:focus{ border-color:#11998e; outline:none; }
-button{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:6px;
-  background:#11998e;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-  transition:0.3s;
-}
-button:hover{ background:#0d7f77; }
-#msg{ margin-top:15px; color:green; font-size:14px; }
-.login-link{ margin-top:15px; font-size:14px; }
-.login-link a{ color:#11998e; text-decoration:none; font-weight:bold; }
+.logo { font-size:22px; font-weight:bold; margin-bottom:10px; }
+.input-group { margin-bottom:15px; text-align:left; }
+input { width:100%; padding:12px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
+input:focus { border-color:#11998e; outline:none; }
+button { width:100%; padding:12px; border:none; border-radius:6px; background:#11998e; color:white; font-size:16px; cursor:pointer; transition:0.3s; }
+button:hover { background:#0d7f77; }
+#msg { margin-top:15px; color:green; font-size:14px; }
+.login-link { margin-top:15px; font-size:14px; }
+.login-link a { color:#11998e; text-decoration:none; font-weight:bold; }
 </style>
 </head>
 <body>
+
 <div class="signup-container">
   <div class="logo">PredictHub</div>
   <h2>Create your account</h2>
 
   <form id="signupForm">
-    <div class="input-group">
-      <input type="text" id="name" placeholder="Full Name" required>
-    </div>
-    <div class="input-group">
-      <input type="email" id="email" placeholder="Email" required>
-    </div>
-    <div class="input-group">
-      <input type="password" id="password" placeholder="Password" required>
-    </div>
+    <div class="input-group"><input type="text" id="name" placeholder="Full Name" required></div>
+    <div class="input-group"><input type="email" id="email" placeholder="Email" required></div>
+    <div class="input-group"><input type="password" id="password" placeholder="Password" required></div>
     <button type="submit">Create Account</button>
   </form>
 
   <p id="msg"></p>
+
   <div class="login-link">
     Already have an account? <a href="login.html">Login</a>
   </div>
 </div>
 
 <script>
-const scriptURL = "YOUR_API_WEBAPP_URL";
+const API_URL = "https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJIqNhXw0IXArQCkSNE8qsjiLHJkPVJJRqftQUUUTLTt61qA/exec";
 
 document.getElementById("signupForm").addEventListener("submit", e => {
     e.preventDefault();
-
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
 
-    fetch(scriptURL, {
+    if(!name || !email || !password) return;
+
+    fetch(API_URL, {
         method: "POST",
-        body: new URLSearchParams({
-            action: "signup",
-            name: name,
-            email: email,
-            password: password
-        })
+        body: new URLSearchParams({ action: "signup", name, email, password })
     })
     .then(res => res.json())
     .then(data => {
         if(data.success){
-            document.getElementById("msg").innerText = "Account created successfully! You can now log in 🎉";
+            document.getElementById("msg").innerText = "Account created successfully 🎉. Click Login.";
+            document.getElementById("signupForm").reset();
         } else {
             document.getElementById("msg").innerText = "Error: " + data.message;
         }
     })
-    .catch(err => {
-        console.error(err);
-        document.getElementById("msg").innerText = "Server error. Try again later.";
-    });
+    .catch(err => { console.error(err); document.getElementById("msg").innerText="Server error." });
 });
 </script>
 </body>
