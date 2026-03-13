@@ -101,7 +101,9 @@ const API_URL = "https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJ
 const email = (localStorage.getItem('userEmail') || "").trim().toLowerCase();
 if(!email) { window.location.href = "login.html"; }
 
-// Update UI balances
+// ---------------------
+// Update balances in UI
+// ---------------------
 function updateBalances(balance, totalBets){
   document.getElementById('userBalance').innerText = balance;
   document.getElementById('headerBalance').innerText = balance;
@@ -109,13 +111,15 @@ function updateBalances(balance, totalBets){
   document.getElementById('headerBets').innerText = totalBets;
 }
 
-// Fetch user info from API
+// ---------------------
+// Fetch user info / balances from API
+// ---------------------
 async function fetchUserInfo(){
   try {
     const res = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type':'application/json' },
-      body: JSON.stringify({ action: 'login', email })
+      body: JSON.stringify({ action:'login', email })
     });
     const data = await res.json();
 
@@ -138,18 +142,24 @@ fetchUserInfo();
 // Auto-refresh balances every 60 seconds
 setInterval(fetchUserInfo, 60000);
 
+// ---------------------
 // Deposit button
+// ---------------------
 document.getElementById('depositBtn').addEventListener('click', () => {
   window.location.href = 'deposit.html?email=' + encodeURIComponent(email);
 });
 
+// ---------------------
 // Logout button
+// ---------------------
 document.getElementById('logoutBtn').addEventListener('click', () => {
   localStorage.removeItem('userEmail');
   window.location.href = 'login.html';
 });
 
+// ---------------------
 // Place bet function
+// ---------------------
 async function placeBet(prediction, amount, choice){
   try {
     const res = await fetch(API_URL, {
@@ -160,10 +170,11 @@ async function placeBet(prediction, amount, choice){
     const data = await res.json();
 
     if(data.success){
+      // Update balance immediately from API response
       updateBalances(data.balance || 0, data.totalBets || 0);
       alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
     } else {
-      alert('Error: '+data.message);
+      alert('Error: ' + data.message);
     }
   } catch(err){
     console.error(err);
@@ -174,5 +185,6 @@ async function placeBet(prediction, amount, choice){
 
 </body>
 </html>
+
 
 
