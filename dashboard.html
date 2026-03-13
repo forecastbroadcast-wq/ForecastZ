@@ -165,12 +165,13 @@ async function placeBet(prediction, amount, choice) {
     const res = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'placeBet', email, prediction, choice, amount })
+      body: JSON.stringify({ action:'placeBet', email, prediction, choice, amount })
     });
     const data = await res.json();
 
     if (data.success) {
-      updateBalances(data.balance, data.totalBets);
+      // Update UI with new balance & total bets
+      updateBalances(data.balance || 0, data.totalBets || 0);
       alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
     } else {
       alert('Error: ' + data.message);
@@ -184,6 +185,7 @@ async function placeBet(prediction, amount, choice) {
 
 </body>
 </html>
+
 
 
 
