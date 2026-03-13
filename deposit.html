@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Deposit</title>
+    <title>Deposit - PredictHub</title>
     <style>
         body { font-family: Arial; background: #f4f6f8; padding: 20px; }
         .container { background: white; padding: 30px; max-width: 500px; margin: 50px auto; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
@@ -45,6 +45,8 @@
 </div>
 
 <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJIqNhXw0IXArQCkSNE8qsjiLHJkPVJJRqftQUUUTLTt61qA/exec";
+
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => { alert('Copied: ' + text); })
         .catch(err => { console.error('Could not copy text: ', err); });
@@ -55,41 +57,40 @@
     }
 
     function submitDeposit() {
-        const proof = document.getElementById('proof').value.trim();
-        const amount = document.getElementById('amount').value.trim();
         const email = getUserEmail();
+        const amount = Number(document.getElementById('amount').value.trim());
+        const proof = document.getElementById('proof').value.trim();
 
-        if (!amount || isNaN(amount) || Number(amount) <= 0) { alert('Please enter a valid deposit amount.'); return; }
-        if (!proof) { alert('Please paste your payment proof.'); return; }
         if (!email) { alert('User email not found. Please log in first.'); window.location.href='login.html'; return; }
+        if (!amount || isNaN(amount) || amount <= 0) { alert('Please enter a valid deposit amount.'); return; }
+        if (!proof) { alert('Please paste your payment proof.'); return; }
 
         localStorage.setItem('userEmail', email);
-       fetch('https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJIqNhXw0IXArQCkSNE8qsjiLHJkPVJJRqftQUUUTLTt61qA/exec', {
-    method: 'POST',
-    body: new URLSearchParams({
-        email: email,
-        proof: proof,
-        amount: amount
-    })
-})
-.then(res => res.json())
-.then(data => {
-    if (data.success) {
-        localStorage.setItem('userBalance', data.newBalance);
-        alert('Deposit submitted! Balance: ' + data.newBalance);
-        window.location.href = 'dashboard.html';
-    } else {
-        alert('Error: ' + data.message);
-    }
-})
-.catch(err => {
-    console.error(err);
-    alert("Server error. Try again later.");
-});
+
+        fetch(scriptURL, {
+            method: 'POST',
+            body: new URLSearchParams({
+                action: "deposit",
+                email: email,
+                amount: amount,
+                proof: proof
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success){
+                localStorage.setItem('userBalance', data.newBalance);
+                alert('Deposit submitted! Balance: ' + data.newBalance);
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Server error. Try again later.");
+        });
     }
 </script>
 </body>
 </html>
-
-
-
