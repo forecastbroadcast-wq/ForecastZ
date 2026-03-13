@@ -123,44 +123,48 @@ Already have an account? <a href="login.html">Login</a>
 </div>
 
 <script>
-
 const scriptURL = "https://script.google.com/macros/s/AKfycbwaD0i55YJtLeU55QbbNWjJIqNhXw0IXArQCkSNE8qsjiLHJkPVJJRqftQUUUTLTt61qA/exec"
 
 document.getElementById("signupForm").addEventListener("submit", e => {
+    e.preventDefault();
 
-e.preventDefault()
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-fetch(scriptURL, {
+    if (!name || !email || !password) {
+        document.getElementById("msg").innerText = "Please fill all fields.";
+        return;
+    }
 
-method:"POST",
-
-body:new URLSearchParams({
-
-action:"signup",
-
-name:document.getElementById("name").value,
-
-email:document.getElementById("email").value,
-
-password:document.getElementById("password").value
-
-})
-
-})
-
-.then(res=>res.text())
-
-.then(data=>{
-
-document.getElementById("msg").innerText="Account created successfully Click on Log In 🎉"
-
-})
-
-})
-
+    fetch(scriptURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            action: "signup",
+            name: name,
+            email: email,
+            password: password
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById("msg").innerText = "Account created successfully! Redirecting to login... 🎉";
+            setTimeout(() => { window.location.href = "login.html"; }, 1500);
+        } else {
+            document.getElementById("msg").innerText = data.message || "Signup failed. Try again.";
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById("msg").innerText = "Server error. Try again later.";
+    });
+});
 </script>
 
 </body>
 
 </html>
+
 
