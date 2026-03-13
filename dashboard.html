@@ -160,23 +160,22 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
 // ---------------------
 // Place bet function
 // ---------------------
-async function placeBet(prediction, amount, choice){
+async function placeBet(prediction, amount, choice) {
   try {
     const res = await fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type':'application/json' },
-      body: JSON.stringify({ action:'placeBet', email, prediction, choice, amount })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'placeBet', email, prediction, choice, amount })
     });
     const data = await res.json();
 
-    if(data.success){
-      // Update balance immediately from API response
-      updateBalances(data.balance || 0, data.totalBets || 0);
+    if (data.success) {
+      updateBalances(data.balance, data.totalBets);
       alert(`Bet placed: ${choice} on "${prediction}" for $${amount}`);
     } else {
       alert('Error: ' + data.message);
     }
-  } catch(err){
+  } catch (err) {
     console.error(err);
     alert('Server error. Please try again.');
   }
@@ -185,6 +184,7 @@ async function placeBet(prediction, amount, choice){
 
 </body>
 </html>
+
 
 
 
